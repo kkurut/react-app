@@ -4,7 +4,7 @@
   "version": "0.0.0",
   "type": "module",
   "scripts": {
-    "dev": "vite",
+    "start": "vite --port 0052 --open",
     "build": "vite build",
     "predeploy": "npm run build",
     "deploy": "gh-pages -d dist",

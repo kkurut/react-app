@@ -1,34 +1,44 @@
-name: Deploy to GitHub Pages
+name: Deploy to GitHub-Pages
 
 on:
   push:
     branches:
-      - main  # Убедитесь, что это ветка, на которую вы хотите настроить деплой
+      - master
 
 jobs:
-  build:
+  deploy:
+    name: Deploy
+
+    permissions:
+      contents: write
+
     runs-on: ubuntu-latest
 
     steps:
-      - name: Checkout repository
-        uses: actions/checkout@v3
 
-      - name: Set up Node.js
-        uses: actions/setup-node@v3
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Setup Node
+        uses: actions/setup-node@v4
         with:
-          node-version: '20.15.1'  # Установка нужной версии Node.js
+          node-version-file: 'package.json'
+
+      - name: Restore cache
+        uses: actions/cache@v3
+        with:
+          path: ~/.npm
+          key: cache-npm-${{ hashFiles('./package-lock.json') }}
+          restore-keys: cache-npm-
 
       - name: Install dependencies
-        run: npm install
+        run: npm ci
 
-      - name: Build the project
+      - name: Build project
         run: npm run build
 
-      - name: Deploy to GitHub Pages
-        run: |
-          git config --global user.email "kkurut@ya.ru"
-          git config --global user.name "abdullazim"
-          git remote set-url origin https://x-access-token:${{ secrets.GITHUB_TOKEN }}@github.com/${{ github.repository }}
-          npm run deploy
-        env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+      - name: Deploy
+        uses: JamesIves/github-pages-deploy-action@v4
+        with:
+          folder: ./build
+          branch: gh-pages

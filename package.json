@@ -10,7 +10,7 @@
     "deploy": "gh-pages -d dist",
     "lint": "eslint .",
     "preview": "vite preview",
-    "postcommit": "concurrently \"npm run build\" \"npm run deploy\""
+    "postdeploy": "npm run build && gh-pages -d dist"
   },
   "dependencies": {
     "react": "^18.3.1",

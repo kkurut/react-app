@@ -1,31 +1,44 @@
-name: Deploy to GitHub Pages
+name: Deploy to GitHub-Pages
 
 on:
   push:
     branches:
-      - main  # или другая ветка, в которую вы хотите деплоить
+      - master
 
 jobs:
-  build-and-deploy:
+  deploy:
+    name: Deploy
+
+    permissions:
+      contents: write
+
     runs-on: ubuntu-latest
 
     steps:
-      - name: Checkout the repository
-        uses: actions/checkout@v2
 
-      - name: Set up Node.js
-        uses: actions/setup-node@v2
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Setup Node
+        uses: actions/setup-node@v4
         with:
-          node-version: '20'  # или другая версия Node.js
+          node-version-file: 'package.json'
+
+      - name: Restore cache
+        uses: actions/cache@v3
+        with:
+          path: ~/.npm
+          key: cache-npm-${{ hashFiles('./package-lock.json') }}
+          restore-keys: cache-npm-
 
       - name: Install dependencies
-        run: npm install
+        run: npm ci
 
-      - name: Build the project
+      - name: Build project
         run: npm run build
 
-      - name: Deploy to GitHub Pages
-        uses: peaceiris/actions-gh-pages@v3
+      - name: Deploy
+        uses: JamesIves/github-pages-deploy-action@v4
         with:
-          github_token: ${{ secrets.GITHUB_TOKEN }}
-          publish_dir: ./dist
+          folder: ./dist
+          branch: gh-pages

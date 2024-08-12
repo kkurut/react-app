@@ -7,7 +7,7 @@ import reactRefresh from 'eslint-plugin-react-refresh'
 export default [
   {
     files: ['**/*.{js,jsx}'],
-    ignores: ['dist'],
+    ignores: ['dist/**'],
     languageOptions: {
       ecmaVersion: 2020,
       globals: globals.browser,
@@ -32,6 +32,12 @@ export default [
       'react-refresh/only-export-components': [
         'warn',
         { allowConstantExport: true },
+      ],
+      'no-unused-vars': [
+        'error',
+        {
+          varsIgnorePattern: 'React', // Игнорировать переменную React
+        },
       ],
     },
   },

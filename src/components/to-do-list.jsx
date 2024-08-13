@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import './App.scss';
+import './to-do-list.scss';
 
 const App = () => {
   const [todos, setTodos] = useState([]);

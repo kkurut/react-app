@@ -1,5 +1,7 @@
 import React, { useState } from 'react';
-import './to-do-list.scss';
+import Header from './components/header';
+import AgeInput from './components/age-input';
+import './App.scss';
 
 const App = () => {
   const [todos, setTodos] = useState([]);
@@ -24,9 +26,20 @@ const App = () => {
     setTodos(updatedTodos);
   };
 
+  const [count, setCount] = useState(0);
+
+ 
   return (
     <div className="app-container">
-      <h1>To-do Liist</h1>
+      <Header></Header>
+      <AgeInput />
+      <div>
+        <p>Вы нажали {count} раз</p>
+        <button onClick={() => setCount(count + 1)}>
+          Нажми меня
+        </button>
+      </div>
+      <h1>To-do List</h1>
       <input
         type="text"
         value={newTodo}
@@ -53,4 +66,5 @@ const App = () => {
   );
 };
 
+// Export the App component
 export default App;
